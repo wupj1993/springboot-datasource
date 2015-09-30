@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+<head >
+    <meta charset="UTF-8">
+    <title>showtime</title>
+</head>
+<body>
+<h1>This is showtime</h1>
+#set($man="你们")
+$man
+</body>
+</html>
