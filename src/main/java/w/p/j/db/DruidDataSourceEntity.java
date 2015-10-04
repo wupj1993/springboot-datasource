@@ -177,4 +177,28 @@ public class DruidDataSourceEntity {
     public void setFilters(String filters) {
         this.filters = filters;
     }
+
+    @Override
+    public String toString() {
+        return "DruidDataSourceEntity{" +
+                "driverClassName='" + driverClassName + '\'' +
+                ", url='" + url + '\'' +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", maxActive=" + maxActive +
+                ", maxIdle=" + maxIdle +
+                ", minIdle=" + minIdle +
+                ", initialSize=" + initialSize +
+                ", maxWait=" + maxWait +
+                ", timeBetweenEvictionRunsMillis=" + timeBetweenEvictionRunsMillis +
+                ", minEictableIdleTimeMillis=" + minEictableIdleTimeMillis +
+                ", testOnBorrow=" + testOnBorrow +
+                ", testOnReturn=" + testOnReturn +
+                ", testWhileIdle=" + testWhileIdle +
+                ", validationQuery='" + validationQuery + '\'' +
+                ", poolPreparedStatements=" + poolPreparedStatements +
+                ", maxOpenPreparedStatements=" + maxOpenPreparedStatements +
+                ", filters='" + filters + '\'' +
+                '}';
+    }
 }

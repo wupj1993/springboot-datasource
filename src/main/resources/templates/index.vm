@@ -6,14 +6,7 @@
 
 </head>
 <body>
-    this is test!!! ${user}
-$user.name
-<h1>你好</h1>
-<h2>$man</h2>
-    <h2>$math.add(1,3)</h2>
-    <h3>$request</h3>
-$test
-    <br>
-$sayHello("你好世界")
+   ${user}
+
 </body>
 </html>

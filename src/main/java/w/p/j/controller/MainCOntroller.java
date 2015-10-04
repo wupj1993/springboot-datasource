@@ -10,23 +10,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import w.p.j.daomian.User;
-import w.p.j.service.UserService;
+import w.p.j.daomain.TbUserorder;
+import w.p.j.serviceImpl.UserOrderImpl;
 
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
+import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * Created by WPJ587 on 2015/9/29.
  */
 @Controller
 @RequestMapping("/")
-public class MainCOntroller {
+public class MainController {
 
 
-    @Autowired
-    UserService userService;
+    @Resource
+  private   UserOrderImpl userOrderImpl;
 
 
     @RequestMapping
@@ -38,36 +37,16 @@ public class MainCOntroller {
 
     @RequestMapping(value = {"/user/{id}"}, method = {RequestMethod.GET})
     @ResponseBody
-    public User findOne(@PathVariable("id") String id) throws Exception {
-        Future<User> res = userService.findOne(id);
-        return res.get(1000, TimeUnit.MILLISECONDS);
+    public TbUserorder findOne(@PathVariable("id") int id) throws Exception {
+        TbUserorder tbUserorder=  userOrderImpl.selectByKey(id);
+        return tbUserorder;
     }
-
-
-    @RequestMapping(value = {"/user"}, method = {RequestMethod.GET})
-    @ResponseBody
-    public String register(@RequestParam("name") String name) {
-        userService.addUser(name);
-        return "success";
-    }
-
 
     @RequestMapping("/velocity")
-    public String velocity(Model model) {
-        Future<User> res = userService.findOne(1 + "");
-        User user = new User();
-        System.out.println("res--->" + res);
-        try {
-            System.out.println("res--->" + res.get().getAge());
-
-            user.setAge(res.get().getAge());
-            user.setId(res.get().getId());
-            user.setName(res.get().getName());
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
+    public String velocity(TbUserorder tbUserorder,Model model,@RequestParam(required = false, defaultValue = "1") int page,
+                           @RequestParam(required = false, defaultValue = "3") int rows) {
+        List<TbUserorder> user =userOrderImpl.selectByCountry(tbUserorder,page,rows);
+        System.out.println(user.toString());
         model.addAttribute("user", user);
         return "index";
     }

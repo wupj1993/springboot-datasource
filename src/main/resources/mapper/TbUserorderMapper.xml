@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="w.p.j.dao.TbUserorderMapper">
+  <resultMap id="BaseResultMap" type="w.p.j.daomain.TbUserorder">
+    <!--
+      WARNING - @mbggenerated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="openid" jdbcType="VARCHAR" property="openid" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="user_phone" jdbcType="VARCHAR" property="userPhone" />
+    <result column="user_address" jdbcType="VARCHAR" property="userAddress" />
+    <result column="user_order_date" jdbcType="TIMESTAMP" property="userOrderDate" />
+    <result column="user_booking" jdbcType="TIMESTAMP" property="userBooking" />
+    <result column="user_total" jdbcType="REAL" property="userTotal" />
+    <result column="user_time" jdbcType="REAL" property="userTime" />
+    <result column="user_other" jdbcType="VARCHAR" property="userOther" />
+  </resultMap>
+</mapper>

@@ -3,7 +3,6 @@
 <configuration>
 	<settings>
 		<setting name="cacheEnabled" value="true" />
-		<setting name="lazyLoadingEnabled" value="true" />
 		<setting name="aggressiveLazyLoading" value="true" />
 		<setting name="useGeneratedKeys" value="true" />
 		<setting name="defaultExecutorType" value="SIMPLE" />
