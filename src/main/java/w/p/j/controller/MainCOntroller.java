@@ -6,9 +6,14 @@
 
 package w.p.j.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import w.p.j.daomain.TbUserorder;
 import w.p.j.serviceImpl.UserOrderImpl;
@@ -22,11 +27,13 @@ import java.util.List;
 @Controller
 @RequestMapping("/")
 public class MainController {
-
+    private static final Logger logger = LoggerFactory
+            .getLogger(MainController.class);
 
     @Resource
   private   UserOrderImpl userOrderImpl;
-
+    @Resource
+    private CacheManager cacheManager;
 
     @RequestMapping
     @ResponseBody
@@ -54,6 +61,20 @@ public class MainController {
     @RequestMapping("/showtime")
     public String showTime() {
         return "show";
+    }
+    @RequestMapping("/orderCache/{id}")
+    public String detail(@PathVariable("id")int id,ModelMap map){
+       TbUserorder tbUserorder= userOrderImpl.selectByKey(id);
+        map.addAttribute("order", tbUserorder);
+        logger.info("order-----"+tbUserorder.toString());
+        return "orderDetail";
+    }
+    @RequestMapping("/order/{id}")
+    public String detailNoCache(@PathVariable("id")int id,ModelMap map){
+        TbUserorder tbUserorder= userOrderImpl.selectByKey(id);
+        map.addAttribute("order", tbUserorder);
+        logger.error("tb--"+tbUserorder);
+        return "orderDetail";
     }
 
 }

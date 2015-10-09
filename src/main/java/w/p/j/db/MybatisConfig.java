@@ -16,9 +16,14 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.annotation.Scope;
 import org.springframework.core.env.StandardEnvironment;
 import org.springframework.core.io.ClassPathResource;
@@ -26,10 +31,13 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.util.ClassUtils;
 import tk.mybatis.spring.mapper.MapperScannerConfigurer;
 import w.p.j.util.MyMapper;
 
+import javax.persistence.EntityManager;
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -39,11 +47,11 @@ import java.util.Properties;
  * Created by WPJ587 on 2015/9/28.
  */
 @Configuration
-@EnableAutoConfiguration(exclude = {DruidDataSourceEntity.class})
+@EnableAutoConfiguration (exclude={DataSourceAutoConfiguration.class})
 public class MybatisConfig {
     private Logger logger = LoggerFactory.getLogger(this.getClass().getName());
-
-
+    private DataSource dataSource;
+    private SqlSessionFactory sqlSessionFactory;
     @Autowired
     private DruidDataSourceEntity druidDataSourceEntity;
 
@@ -51,12 +59,14 @@ public class MybatisConfig {
     public DataSource dataSource() {
         logger.info("------------druidDataSourceEntity------" + druidDataSourceEntity);
         //加载配置文件属性
+
         DruidDataSource dataSource = new DruidDataSource();
         dataSource.setDriverClassName(druidDataSourceEntity.getDriverClassName());
         dataSource.setUsername(druidDataSourceEntity.getUsername());
         dataSource.setPassword(druidDataSourceEntity.getPassword());
         dataSource.setUrl(druidDataSourceEntity.getUrl());
         dataSource.setMaxActive(druidDataSourceEntity.getMaxActive());
+        dataSource.setMinIdle(druidDataSourceEntity.getMinIdle());
         dataSource.setValidationQuery(druidDataSourceEntity.getValidationQuery());
         dataSource.setTestOnBorrow(druidDataSourceEntity.isTestOnBorrow());
         dataSource.setTestOnReturn(druidDataSourceEntity.isTestOnReturn());
@@ -70,6 +80,7 @@ public class MybatisConfig {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        this.dataSource=dataSource;
         return dataSource;
     }
 
@@ -83,10 +94,11 @@ public class MybatisConfig {
     }
 
 
-    @Bean
+    @Bean(name = "sqlSessionFactory")
     public SqlSessionFactory sqlSessionFactory() throws Exception {
         logger.info("------> sqlSessionFactory");
         final SqlSessionFactoryBean sqlSessionFactory = new SqlSessionFactoryBean();
+        System.out.println("----first-->");
         sqlSessionFactory.setDataSource(dataSource());
         sqlSessionFactory.setConfigLocation(new ClassPathResource("mybatis-config.xml"));
         Interceptor[] interceptors = new Interceptor[1];
@@ -105,11 +117,13 @@ public class MybatisConfig {
     }
 
 
-    @Bean
-    public DataSourceTransactionManager transactionManager() {
-        logger.info("> transactionManager");
-        return new DataSourceTransactionManager(dataSource());
-    }
+//    @Bean
+//    public DataSourceTransactionManager transactionManager() {
+//        logger.info("> transactionManager");
+//        DataSourceTransactionManager dataSourceTransactionManager=new DataSourceTransactionManager();
+//
+//        return new DataSourceTransactionManager(dataSource());
+//    }
 
     @Bean
     @Scope(value = "prototype")//线程安全
@@ -117,7 +131,7 @@ public class MybatisConfig {
 
         try {
             logger.info("SqlSessionTemplate---");
-            return new SqlSessionTemplate(sqlSessionFactory());
+            return new SqlSessionTemplate(sqlSessionFactory);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -125,6 +139,11 @@ public class MybatisConfig {
         return null;
     }
 
+    @Bean
 
+    public PlatformTransactionManager transactionManager() {
+        logger.info("transactionManager---------------->");
+        return new DataSourceTransactionManager(dataSource);
+    }
 
 }

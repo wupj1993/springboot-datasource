@@ -4,7 +4,7 @@ import java.util.Date;
 import javax.persistence.*;
 
 @Table(name = "tb_userorder")
-public class TbUserorder {
+public class TbUserorder extends BaseDaomain {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

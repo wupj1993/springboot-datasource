@@ -4,7 +4,7 @@
 
   <groupId>w.p.j</groupId>
   <artifactId>Velocity</artifactId>
-  <version>1.0-SNAPSHOT</version>
+  <version>1.1-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>Velocity</name>
@@ -13,9 +13,17 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <start-class>w.p.j.App</start-class>
+    <targetResourcesProject>${basedir}/src/main/resources</targetResourcesProject>
+    <targetXMLPackage>mapper</targetXMLPackage>
+    <targetJavaProject>${basedir}/src/main/java</targetJavaProject>
+    <targetMapperPackage>w.p.j.dao</targetMapperPackage>
+    <targetModelPackage>w.p.j.daomain</targetModelPackage>
+    <mapper.version>3.2.2</mapper.version>
+    <jdk.version>1.7</jdk.version>
   </properties>
   <dependencyManagement>
-    <dependencies> <dependency>
+    <dependencies>
+      <dependency>
       <!-- Import dependency management from Spring Boot -->
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-dependencies</artifactId>
@@ -26,6 +34,7 @@
     </dependencies>
   </dependencyManagement>
   <dependencies>
+
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -39,10 +48,10 @@
       <artifactId>spring-boot-starter-velocity</artifactId>
     </dependency>
     <dependency>
-      <groupId>velocity-tools</groupId>
-      <artifactId>velocity-tools</artifactId>
-      <version>1.4</version>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-aop</artifactId>
     </dependency>
+
 
     <!-- mybatis -->
     <dependency>
@@ -50,6 +59,23 @@
       <artifactId>mybatis</artifactId>
       <version>3.3.0</version>
     </dependency>
+    <!--通用
+    mapper
+    -->
+    <dependency>
+      <groupId>tk.mybatis</groupId>
+      <artifactId>mapper</artifactId>
+<version>${mapper.version}</version>
+    </dependency>
+    <!--mybatis分页工具
+    https://github.com/pagehelper/Mybatis-PageHelper
+    -->
+    <dependency>
+      <groupId>com.github.pagehelper</groupId>
+      <artifactId>pagehelper</artifactId>
+      <version>4.0.1</version>
+    </dependency>
+
     <dependency>
       <groupId>org.mybatis</groupId>
       <artifactId>mybatis-spring</artifactId>
@@ -66,6 +92,14 @@
       <artifactId>druid</artifactId>
       <version>1.0.14</version>
     </dependency>
+<!--
+spring测试
+-->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
 
     <!-- tomcat -->
     <dependency>
@@ -74,14 +108,47 @@
       <scope>provided</scope>
     </dependency>
   </dependencies>
-
   <build>
     <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.3</version>
+        <configuration>
+          <source>${jdk.version}</source>
+          <target>${jdk.version}</target>
+        </configuration>
+      </plugin>
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
         <version>1.2.5.RELEASE</version>
+
       </plugin>
+      <plugin>
+        <groupId>org.mybatis.generator</groupId>
+        <artifactId>mybatis-generator-maven-plugin</artifactId>
+        <version>1.3.2</version>
+        <configuration>
+          <configurationFile>${basedir}/src/main/resources/generator/generatorConfig.xml</configurationFile>
+          <overwrite>true</overwrite>
+          <verbose>true</verbose>
+        </configuration>
+        <dependencies>
+          <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.35</version>
+          </dependency>
+          <dependency>
+            <groupId>tk.mybatis</groupId>
+            <artifactId>mapper</artifactId>
+            <version>${mapper.version}</version>
+          </dependency>
+        </dependencies>
+      </plugin>
+
+
     </plugins>
   </build>
 </project>

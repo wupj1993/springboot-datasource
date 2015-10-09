@@ -7,6 +7,9 @@
 package w.p.j.serviceImpl;
 
 import com.github.pagehelper.PageHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 import tk.mybatis.mapper.util.StringUtil;
@@ -20,14 +23,17 @@ import java.util.List;
 
 /**
  * Created by WPJ587 on 2015/10/1.
+ *
  */
 @Service("userOrderImpl")
-public class UserOrderImpl extends BaseService<TbUserorder>  implements UserOrder {
-        @Resource
-        private TbUserorderMapper tbUserorderMapper;
+public class UserOrderImpl extends BaseService<TbUserorder> implements UserOrder {
+    private Logger logger= LoggerFactory.getLogger(this.getClass().getName());
+    @Resource
+    private TbUserorderMapper tbUserorderMapper;
+
     @Override
     public List<TbUserorder> selectByCountry(TbUserorder tbUserorder, int page, int rows) {
-       Example example = new Example(TbUserorder.class);
+        Example example = new Example(TbUserorder.class);
         Example.Criteria criteria = example.createCriteria();
         if (StringUtil.isNotEmpty(tbUserorder.getUserAddress())) {
             criteria.andLike("countryname", "%" + tbUserorder.getUserAddress() + "%");
@@ -41,5 +47,23 @@ public class UserOrderImpl extends BaseService<TbUserorder>  implements UserOrde
         //分页查询
         PageHelper.startPage(page, rows);
         return tbUserorderMapper.selectAll();
+    }
+
+    /**
+     * 使用具体实现类具有缓存的效果
+     * 直接使用父类的没有缓存
+     * @param key
+     * @return
+     */
+    @Override
+    public TbUserorder selectByKey(Object key) {
+        logger.debug("---haveCache---",key);
+        return tbUserorderMapper.selectByPrimaryKey(key);
+    }
+
+    @Override
+    public List<TbUserorder> selectByExample(Object example) {
+        logger.debug("---haveCache---",example);
+        return tbUserorderMapper.selectByExample(example);
     }
 }

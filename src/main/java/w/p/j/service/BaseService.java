@@ -6,7 +6,10 @@
 
 package w.p.j.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.common.Mapper;
 
@@ -17,12 +20,12 @@ import java.util.List;
  */
 @Service
 public abstract class BaseService<T> implements IService<T> {
-
     @Autowired
     protected Mapper<T> mapper;
 
     @Override
     public T selectByKey(Object key) {
+
         return mapper.selectByPrimaryKey(key);
     }
 
