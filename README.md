@@ -1,4 +1,6 @@
-# springboot-datasource
-使用了分页插件，和添加了通用mapper 但是美中不足的是多了个配置文件applicationContent.xml
-这个在后期尽可能的解决吧
+# 版本1.2
+添加druid监控，路径为项目/druid
+mybatis缓存失效
+事务没有被spring接管
+
 
