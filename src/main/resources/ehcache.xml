@@ -1,16 +1,7 @@
-<!--
-  ~ Copyright (c) 2015 - 10 - 8  11 : 17 :$second.second
-  ~ @author wupeiji It will be
-  ~ @Email wpjlovehome@gmail.com
-  -->
-
 <ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		 xsi:noNamespaceSchemaLocation="ehcache.xsd" updateCheck="true"
 		 monitoring="autodetect" dynamicConfig="true">
-
-	<!-- <diskStore path="java.io.tmpdir" /> -->
-	<diskStore path="~/cache" />
-
+	 <diskStore path="../temp/ehcache" />
 	<cache name="myCache"
 		   maxEntriesLocalHeap="10000"
 		   maxEntriesLocalDisk="1000"
@@ -21,5 +12,17 @@
 		   transactionalMode="off">
 		<persistence strategy="localTempSwap" />
 	</cache>
+	<!-- 默认缓存配置. -->
+	<defaultCache maxEntriesLocalHeap="100" eternal="false" timeToIdleSeconds="300" timeToLiveSeconds="600"
+				  overflowToDisk="true" maxEntriesLocalDisk="100000" />
+	<!-- 系统缓存 -->
+	<cache name="sysCache" maxEntriesLocalHeap="100" eternal="true" overflowToDisk="true"/>
+	<!-- 用户缓存 -->
+	<cache name="userCache" maxEntriesLocalHeap="100" eternal="true" overflowToDisk="true"/>
+
+	<!-- 系统活动会话缓存 -->
+	<cache name="activeSessionsCache" maxEntriesLocalHeap="10000" overflowToDisk="true"
+		   eternal="true" timeToLiveSeconds="0" timeToIdleSeconds="0"
+		   diskPersistent="true" diskExpiryThreadIntervalSeconds="600"/>
 
 </ehcache>
