@@ -7,6 +7,9 @@
 </head>
 <body>
    ${user}
-
+    全局
+#test
+#sayHello("小吴")
+计算：$math.add(1,4)
 </body>
 </html>

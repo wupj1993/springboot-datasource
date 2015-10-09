@@ -56,14 +56,16 @@ public class UserOrderImpl extends BaseService<TbUserorder> implements UserOrder
      * @return
      */
     @Override
+    @Cacheable(value = "myCache",key = "#key")
     public TbUserorder selectByKey(Object key) {
         logger.debug("---haveCache---",key);
         return tbUserorderMapper.selectByPrimaryKey(key);
     }
 
     @Override
+    @Cacheable(value = "myCache")
     public List<TbUserorder> selectByExample(Object example) {
-        logger.debug("---haveCache---",example);
+
         return tbUserorderMapper.selectByExample(example);
     }
 }

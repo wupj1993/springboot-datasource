@@ -34,7 +34,7 @@
 	<!--<logger name="java.sql.PreparedStatement" level="DEBUG" />-->
 	<!--<logger name="java.sql.ResultSet" level="DEBUG" />-->
 
-	<root level="DEBUG">
+	<root level="INFO">
 		<appender-ref ref="stdout" />
 	</root>
 </configuration>
