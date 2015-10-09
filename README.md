@@ -1,4 +1,6 @@
-# springboot-datasource
-使用了分页插件，和添加了通用mapper 但是美中不足的是多了个配置文件applicationContent.xml
-这个在后期尽可能的解决吧
+# springboot 1.3
+1.解决了全局velocity变量生效问题
+2.做了业务层的全局变量缓存
+3.spring mybatis共存不使用mybatis 的一级缓存的
+4.没被管理网上说是两个事务冲突
 
